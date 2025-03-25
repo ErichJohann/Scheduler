@@ -36,8 +36,22 @@ def get_credentials():
 def main():
     cred = get_credentials()
     service = build("calendar", "v3", credentials=cred)
-    event = input("Type event name: ")
+    name = input("Type event name: ")
     desc = input("Type event description: ")
+
+    event = {
+        "summary": name,
+        "description": desc,
+        "start": {
+            "dateTime": "2025-04-01T08:00:00-03:00",
+        },
+        "end": {
+            "dateTime": "2025-04-01T20:00:00-03:00",
+        }
+    }
+
+    result = service.events().insert(calendarId="primary", body=event).execute()
+    print(f"Event created: {result.get('htmlLink')}")
 
 if __name__ == "__main__":
     main()
